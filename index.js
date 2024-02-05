@@ -1,7 +1,11 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+
+morgan.token('requestData', function (req, res) { return JSON.stringify(req.body) })
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :requestData'))
 
 let persons = [
     { 
@@ -54,8 +58,32 @@ app.get('/info', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
-    const person = request.body
-    console.log(person)
+    const body = request.body
+    const id = Math.floor(Math.random() * 1000000);
+
+    if (!body.name || !body.number) {
+        response.status(400).json({
+            error: 'name and/or number missing'
+        })
+        return
+    }
+
+    const isNameTaken = persons.find(person => person.name === body.name)
+
+    if (isNameTaken) {
+        response.status(400).json({
+            error: 'name must be unique'
+        })
+        return
+    }
+
+    const person = {
+        "id": id,
+        "name": body.name,
+        "number": body.number
+    }
+
+    persons = persons.concat(person)
     response.json(person)
 }) 
 
@@ -65,6 +93,12 @@ app.delete('/api/persons/:id', (request, response) => {
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
 })
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+}
+  
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
