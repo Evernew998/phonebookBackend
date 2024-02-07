@@ -22,3 +22,21 @@ Content-Type: application/json
 {
     "number": "name"
 }
+
+###
+POST https://phonebook2024.onrender.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "Test", 
+    "number": "123"
+}
+
+###
+POST https://phonebook2024.onrender.com/api/persons
+Content-Type: application/json
+
+{
+    "noName": "Test", 
+    "noNumber": "123"
+}

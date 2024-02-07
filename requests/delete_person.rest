@@ -1,4 +1,7 @@
 DELETE http://localhost:3001/api/persons/3
 
 ###
-DELETE http://localhost:3001/api/persons/q
+DELETE http://localhost:3001/api/persons/
+
+###
+DELETE https://phonebook2024.onrender.com/api/persons/270258
