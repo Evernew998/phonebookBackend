@@ -22,7 +22,29 @@ const personSchema = mongoose.Schema({
     },
     number: {
         type: String,
-        required: true
+        minLength: 8,
+        required: true,
+        validate: {
+            validator: function(v) {
+                const regex = /([^-0-9])/
+
+                if (regex.test(v)) {
+                    return false
+                }
+                
+                const numberArray = v.split('-')
+
+                if (numberArray.length !== 2) {
+                    return false
+                }
+
+                if (numberArray[0].length < 2 || numberArray[0].length > 3) {
+                    return false
+                }
+                return true
+            },
+            message: props => `${props.value} is not a valid phone number!`
+        }
     },
 })
 
