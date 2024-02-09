@@ -11,7 +11,7 @@ app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
 
-morgan.token('requestData', function (req, res) {
+morgan.token('requestData', function (req) {
   return JSON.stringify(req.body)
 })
 app.use(
@@ -35,8 +35,6 @@ const errorHandler = (error, request, response, next) => {
 
   next(error)
 }
-
-let persons = []
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then((persons) => {
